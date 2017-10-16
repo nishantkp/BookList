@@ -64,12 +64,11 @@ public class BookAdapter extends ArrayAdapter<Book> {
         }
 
         // FInd the imageVIew with ID book_thumbnail
-        // Set the imageView if there is a drawable available, otherwise set null image
+        // Set the imageView if there is a drawable available, otherwise set placeholder image
         ImageView bookImage = (ImageView) listItemView.findViewById(R.id.book_thumbnail);
         if (currentBookDetail.getBookThumbnail() == null) {
-            bookImage.setImageDrawable(null);
+            bookImage.setImageResource(R.drawable.book_placeholder);
         } else {
-            bookImage.setVisibility(View.VISIBLE);
             bookImage.setImageDrawable(currentBookDetail.getBookThumbnail());
         }
 
