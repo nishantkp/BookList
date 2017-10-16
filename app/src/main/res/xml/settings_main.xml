@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:style="http://schemas.android.com/tools"
+    android:title="@string/settings_menu_label">
+
+    <PreferenceCategory android:title="@string/settings_category_label">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/search_book_by_title_key"
+            android:title="@string/search_book_by_title_label" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/search_book_by_author_key"
+            android:title="@string/search_book_by_author_label" />
+    </PreferenceCategory>
+
+    <ListPreference
+        android:defaultValue="@string/search_by_type_default"
+        android:entries="@array/search_by_type_label"
+        android:entryValues="@array/search_by_type_value"
+        android:key="@string/search_by_type_key"
+        android:summary="%s"
+        android:title="@string/search_by_type" />
+</PreferenceScreen>

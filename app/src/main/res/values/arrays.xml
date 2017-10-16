@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="search_by_type_label">
+        <item>@string/search_by_type_free_label</item>
+        <item>@string/search_by_type_paid_label</item>
+        <item>@string/search_by_type_none_label</item>
+    </string-array>
+
+    <string-array name="search_by_type_value">
+        <item>@string/search_by_type_free_value</item>
+        <item>@string/search_by_type_paid_value</item>
+        <item>@string/search_by_type_none_value</item>
+    </string-array>
+</resources>

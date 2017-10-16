@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Book List</string>
+    <string name="no_network">Check network connection!</string>
+    <string name="no_result">No results found!</string>
+
+    <string name="settings_menu_label">Settings</string>
+
+    <string name="settings_category_label">Search by</string>
+
+    <string name="search_book_by_title_label">Title</string>
+    <string name="search_book_by_title_key" translatable="false">search_book_by_title</string>
+
+    <string name="search_book_by_author_label">Author</string>
+    <string name="search_book_by_author_key" translatable="false">search_book_by_author</string>
+
+    <string name="search_by_type">Type</string>
+    <string name="search_by_type_key" translatable="false">search_by_type</string>
+    <string name="search_by_type_default" translatable="false">@string/search_by_type_free_value</string>
+    
+    <string name="search_by_type_free_label">Free</string>
+    <string name="search_by_type_free_value" translatable="false">free</string>
+
+    <string name="search_by_type_paid_label">Paid</string>
+    <string name="search_by_type_paid_value" translatable="false">paid</string>
+
+    <string name="search_by_type_none_label">All</string>
+    <string name="search_by_type_none_value">all</string>
+
+
+</resources>
