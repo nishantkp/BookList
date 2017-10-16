@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Book List</string>
+    <string name="app_name">Book</string>
     <string name="no_network">Check network connection!</string>
     <string name="no_result">No results found!</string>
 
