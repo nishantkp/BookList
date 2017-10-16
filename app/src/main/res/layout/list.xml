@@ -28,15 +28,6 @@
             android:textColorHighlight="#CFD8DC"
             android:textCursorDrawable="@null" />
 
-        <Button
-            android:id="@+id/user_query_button"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/ic_search_white_24dp"
-            android:backgroundTint="#37474f" />
     </LinearLayout>
 
     <View

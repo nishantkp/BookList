@@ -11,10 +11,10 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -40,6 +40,9 @@ public class MainActivity extends AppCompatActivity
 
     private String mNewGoogleBooksApiUrl;
 
+    /* EditText view for user input query */
+    private EditText mUserInputQuery;
+
     private final String LOG_TAG = MainActivity.class.getName();
 
     @Override
@@ -47,8 +50,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list);
 
-        final Button findButton = (Button) findViewById(R.id.user_query_button);
-        final EditText userInputText = (EditText) findViewById(R.id.user_query);
+        mUserInputQuery = (EditText) findViewById(R.id.user_query);
 
         mEmptyTextView = (TextView) findViewById(R.id.empty_view);
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
@@ -65,62 +67,14 @@ public class MainActivity extends AppCompatActivity
         // Initialize the loader after making sure that there is a valid network connection
         initLoaderAfterCheckingNetwork();
 
-        // Attach addTextChangedListener to EditText view
-        /**
-        userInputText.addTextChangedListener(new TextWatcher() {
+        // Get the query from user after hitting enter
+        mUserInputQuery.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // When first character is white space then disable button otherwise
-                // enable the button in order to generate proper url string and deliver
-                // accurate results
-                if (s.toString().startsWith(" ")) {
-                    findButton.setEnabled(false);
-                } else {
-                    findButton.setEnabled(true);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-         */
-
-        // Attach click listener on button and get the query when button is clicked
-        findButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                // Get the query requested by user from the EditText with id user_query
-                String userQuery = userInputText.getText().toString().trim();
-
-                // Concatenate user query with GOOGLE_BOOK_QUERY to generate correct request
-                mNewGoogleBooksApiUrl = getCorrectApiUrlFromUserQuery(userQuery);
-
-                Log.i(LOG_TAG, "url string : " + mNewGoogleBooksApiUrl);
-
-                // Set empty adapter on list view in order to reset the list view
-                mBookAdapter.clear();
-                mListVIew.setAdapter(mBookAdapter);
-
-                // Destroy the loader with id BOOK_LOADER_ID in order to create a new loader with
-                // new content from query requested by user
-                // and then hide the empty textView to not
-                // overlap progressbar and empty text view
-                getLoaderManager().destroyLoader(BOOK_LOADER_ID);
-
-                // Set visibility of Empty textView to GONE and display progressbar
-                mEmptyTextView.setVisibility(View.GONE);
-                mProgressBar.setVisibility(View.VISIBLE);
-
-                // Initialize the loader after making sure that there is a valid network connection
-                initLoaderAfterCheckingNetwork();
-                // forceLoad the BookLoader with new search query requested by user
-                new BookLoader(MainActivity.this, mNewGoogleBooksApiUrl).forceLoad();
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                // Get the text from user and initialize loader with new content
+                getTextAndInitLoader();
+                // Hide the keyboard after hitting enter
+                return false;
             }
         });
     }
@@ -357,5 +311,35 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    // Get the query from user and initialize new loader with new content
+    private void getTextAndInitLoader(){
+        // Get the query requested by user from the EditText with id user_query
+        String userQuery = mUserInputQuery.getText().toString().trim();
+
+        // Concatenate user query with GOOGLE_BOOK_QUERY to generate correct request
+        mNewGoogleBooksApiUrl = getCorrectApiUrlFromUserQuery(userQuery);
+
+        Log.i(LOG_TAG, "url string : " + mNewGoogleBooksApiUrl);
+
+        // Set empty adapter on list view in order to reset the list view
+        mBookAdapter.clear();
+        mListVIew.setAdapter(mBookAdapter);
+
+        // Destroy the loader with id BOOK_LOADER_ID in order to create a new loader with
+        // new content from query requested by user
+        // and then hide the empty textView to not
+        // overlap progressbar and empty text view
+        getLoaderManager().destroyLoader(BOOK_LOADER_ID);
+
+        // Set visibility of Empty textView to GONE and display progressbar
+        mEmptyTextView.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
+
+        // Initialize the loader after making sure that there is a valid network connection
+        initLoaderAfterCheckingNetwork();
+        // forceLoad the BookLoader with new search query requested by user
+        new BookLoader(MainActivity.this, mNewGoogleBooksApiUrl).forceLoad();
     }
 }
