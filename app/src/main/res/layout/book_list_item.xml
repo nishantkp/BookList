@@ -43,7 +43,7 @@
                     android:ellipsize="end"
                     android:fontFamily="sans-serif-medium"
                     android:maxLines="1"
-                    android:textColor="#263238"
+                    android:textColor="@color/primaryTextColor"
                     android:textSize="14sp"
                     tools:text="Christian Outdoor Leadersheir" />
 
@@ -54,7 +54,7 @@
                     android:ellipsize="end"
                     android:fontFamily="sans-serif-light"
                     android:maxLines="1"
-                    android:textColor="#263238"
+                    android:textColor="@color/secondaryTextColor"
                     android:textSize="13sp"
                     tools:text="Ashley Denton" />
 
@@ -63,7 +63,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
-                    android:textColor="#263238"
+                    android:textColor="@color/secondaryTextColor"
                     android:textSize="13sp"
                     tools:text="2015" />
 
@@ -86,7 +86,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-light"
                         android:paddingLeft="2dp"
-                        android:textColor="#263238"
+                        android:textColor="@color/secondaryTextColor"
                         android:textSize="13sp"
                         tools:text="(125)" />
 
