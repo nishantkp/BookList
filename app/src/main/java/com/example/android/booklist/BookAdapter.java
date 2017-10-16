@@ -89,17 +89,16 @@ public class BookAdapter extends ArrayAdapter<Book> {
         // otherwise hide rating bar and textView
         RatingBar ratingBar = (RatingBar) listItemView.findViewById(R.id.book_rating);
         TextView ratingCount = (TextView) listItemView.findViewById(R.id.book_rating_count);
+        // View is a linear layout with rating bar and text view as child view
+        View ratingView = (View) listItemView.findViewById(R.id.book_rating_view);
         double rating = currentBookDetail.getBookRating();
         if (rating == 0) {
-            ratingBar.setVisibility(View.GONE);
-            ratingCount.setVisibility(View.GONE);
+            ratingView.setVisibility(View.GONE);
         } else {
-            ratingBar.setVisibility(View.VISIBLE);
-            ratingCount.setVisibility(View.VISIBLE);
+            ratingView.setVisibility(View.VISIBLE);
             ratingBar.setRating((float) rating);
             ratingCount.setText('(' + currentBookDetail.getBookRatingNumber() + ')');
         }
-
         return listItemView;
     }
 
