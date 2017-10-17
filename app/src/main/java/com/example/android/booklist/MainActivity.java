@@ -30,13 +30,14 @@ public class MainActivity extends AppCompatActivity
 
     final static String GOOGLE_BOOKS_QUERY_PART_ONE = "https://www.googleapis.com/books/v1/volumes?q=";
     final static String GOOGLE_BOOKS_QUERY_PART_TWO = "&langRestrict=en&maxResults=20&printType=books";
+    public static final String SEARCH_TYPE = "SEARCH_TYPE";
     //final static String GOOGLE_BOOKS_URL = "https://www.googleapis.com/books/v1/volumes?q=android&maxResults=20";
     private ProgressBar mProgressBar;
     private TextView mEmptyTextView;
     private BookAdapter mBookAdapter;
     private ListView mListVIew;
-    private Boolean mSearchByAuthor;
-    private Boolean mSearchByTitle;
+    private boolean mSearchByAuthor;
+    private boolean mSearchByTitle;
     private String mSearchByType;
 
     private String mNewGoogleBooksApiUrl;
@@ -329,5 +330,21 @@ public class MainActivity extends AppCompatActivity
         initLoaderAfterCheckingNetwork();
         // forceLoad the BookLoader with new search query requested by user
         new BookLoader(MainActivity.this, mNewGoogleBooksApiUrl).forceLoad();
+    }
+
+    // Called to retrieve pre-instance state from an activity before being killed so that state can
+    // be restored on onRestoreInstanceState
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString(SEARCH_TYPE, mSearchByType);
+        super.onSaveInstanceState(outState);
+    }
+
+    // Restore the state of variable mSearchBtType when activity is recreated
+    // i.e switching to landscape mode
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mSearchByType = savedInstanceState.getString(SEARCH_TYPE);
     }
 }
