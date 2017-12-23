@@ -205,12 +205,11 @@ public class QueryUtils {
 
 
                     Drawable drawableThumbnail;
+                    String thumbnailUrlString = null;
                     if (volumeInfo.has("imageLinks")) {
                         JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
-                        String thumbnailUrlString = imageLinks.getString("smallThumbnail");
-                        drawableThumbnail = getDrawableObject(thumbnailUrlString);
-                    } else {
-                        drawableThumbnail = null;
+                       thumbnailUrlString = imageLinks.getString("smallThumbnail");
+                       //drawableThumbnail = getDrawableObject(thumbnailUrlString);
                     }
 
                     JSONObject salesInfo = bookObject.getJSONObject("saleInfo");
@@ -233,9 +232,9 @@ public class QueryUtils {
                     //Log.i(LOG_TAG, "\n" + averageRating);
                     //Log.i(LOG_TAG, "\n" + ratingCount);
                     //Log.i(LOG_TAG, "\n" + drawableThumbnail);
+                    assert bookList != null;
                     bookList.add(new Book(title, authors, publishedDate, amount, averageRating,
-                            ratingCount, drawableThumbnail));
-
+                            ratingCount, thumbnailUrlString));
                 }
             }
 

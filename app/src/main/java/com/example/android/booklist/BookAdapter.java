@@ -1,6 +1,8 @@
 package com.example.android.booklist;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,7 +29,8 @@ public class BookAdapter extends ArrayAdapter<Book> {
         super(context, 0, bookList);
     }
 
-
+    @SuppressLint("SetTextI18n")
+    @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -39,6 +44,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
         Book currentBookDetail = getItem(position);
 
         TextView title = (TextView) listItemView.findViewById(R.id.book_title);
+        assert currentBookDetail != null;
         title.setText(currentBookDetail.getBookTitle());
 
         // Find the textView with ID book_author
@@ -63,13 +69,14 @@ public class BookAdapter extends ArrayAdapter<Book> {
             publishedDate.setText(formatDate(currentBookDetail.getPublishedDate()));
         }
 
-        // FInd the imageVIew with ID book_thumbnail
-        // Set the imageView if there is a drawable available, otherwise set placeholder image
+        // Find the imageVIew with ID book_thumbnail
+        // Set the imageView if there is a url available, otherwise set placeholder image
         ImageView bookImage = (ImageView) listItemView.findViewById(R.id.book_thumbnail);
-        if (currentBookDetail.getBookThumbnail() == null) {
+        if (currentBookDetail.getBookThumbnailUrlString() == null) {
             bookImage.setImageResource(R.drawable.book_placeholder);
         } else {
-            bookImage.setImageDrawable(currentBookDetail.getBookThumbnail());
+            String url = currentBookDetail.getBookThumbnailUrlString();
+            Picasso.with(getContext()).load(url).into(bookImage);
         }
 
         // Find the text view with ID book_price
@@ -79,7 +86,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
             bookPrice.setVisibility(View.GONE);
         } else {
             bookPrice.setVisibility(View.VISIBLE);
-            bookPrice.setText('$' + currentBookDetail.getBookPrice());
+            bookPrice.setText("$" + currentBookDetail.getBookPrice());
         }
 
 
@@ -96,7 +103,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
         } else {
             ratingView.setVisibility(View.VISIBLE);
             ratingBar.setRating((float) rating);
-            ratingCount.setText('(' + currentBookDetail.getBookRatingNumber() + ')');
+            ratingCount.setText("(" + currentBookDetail.getBookRatingNumber() + ")");
         }
         return listItemView;
     }
@@ -107,6 +114,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
     //      case 7  :   Feb, 2017
     //      case 10 :   12 Feb, 2017
     //      default :   2017*
+    @SuppressLint("SimpleDateFormat")
     private String formatDate(String date) {
         Date formattedDate = null;
         switch (date.length()) {
@@ -118,19 +126,19 @@ public class BookAdapter extends ArrayAdapter<Book> {
             case 7:
                 //date length = yyyy-MM format
                 // 2017-09 -> Sept, 2017
-                SimpleDateFormat formatYearMonth = new SimpleDateFormat("yyyy-MM");
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat formatYearMonth = new SimpleDateFormat("yyyy-MM");
                 try {
                     formattedDate = formatYearMonth.parse(date);
                 } catch (ParseException e) {
                     Log.e("BookAdapter.this", "Error parsing date format in yyyy-MM", e);
                 }
-                SimpleDateFormat outDate = new SimpleDateFormat("MMM, yyyy");
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat outDate = new SimpleDateFormat("MMM, yyyy");
                 return outDate.format(formattedDate);
 
             case 10:
                 // default length = yyyy-MM-dd
                 // 2017-02-23 -> 23 Feb, 2017
-                SimpleDateFormat formatYearMonthDate = new SimpleDateFormat("yyyy-MM-dd");
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat formatYearMonthDate = new SimpleDateFormat("yyyy-MM-dd");
                 try {
                     formattedDate = formatYearMonthDate.parse(date);
                 } catch (ParseException e) {
