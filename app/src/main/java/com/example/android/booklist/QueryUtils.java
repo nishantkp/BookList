@@ -36,7 +36,7 @@ public class QueryUtils {
 
         // If requested query string is null, return null object
         if (requestedQuery == null) {
-            Log.i(LOG_TAG,"null url passed");
+            Log.i(LOG_TAG, "null url passed");
             return null;
         } else {
             // Generate URL object
@@ -203,58 +203,29 @@ public class QueryUtils {
                         ratingCount = null;
                     }
 
-
-                    Drawable drawableThumbnail;
                     String thumbnailUrlString = null;
                     if (volumeInfo.has("imageLinks")) {
                         JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
-                       thumbnailUrlString = imageLinks.getString("smallThumbnail");
-                       //drawableThumbnail = getDrawableObject(thumbnailUrlString);
+                        thumbnailUrlString = imageLinks.getString("smallThumbnail");
                     }
 
                     JSONObject salesInfo = bookObject.getJSONObject("saleInfo");
                     String amount;
-                    String currencyCode;
                     if (salesInfo.has("retailPrice")) {
                         JSONObject retailPrice = salesInfo.getJSONObject("retailPrice");
                         amount = retailPrice.getString("amount");
-                        currencyCode = retailPrice.getString("currencyCode");
                     } else {
                         amount = null;
-                        currencyCode = null;
                     }
 
-                    //Log.i(LOG_TAG, title);
-                    //Log.i(LOG_TAG, "\n" + authors);
-                    //Log.i(LOG_TAG, "\n" + publishedDate);
-                    //Log.i(LOG_TAG, "\n" + amount);
-                    //Log.i(LOG_TAG, "\n" + currencyCode);
-                    //Log.i(LOG_TAG, "\n" + averageRating);
-                    //Log.i(LOG_TAG, "\n" + ratingCount);
-                    //Log.i(LOG_TAG, "\n" + drawableThumbnail);
                     assert bookList != null;
                     bookList.add(new Book(title, authors, publishedDate, amount, averageRating,
                             ratingCount, thumbnailUrlString));
                 }
             }
-
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Problem generating JSON object : extractFeaturesOfJSON() block", e);
         }
-
         return bookList;
-    }
-
-    // Gets the drawable object from specific URL
-    private static Drawable getDrawableObject(String urlString) {
-        URL url = generateUrl(urlString);
-        Drawable drawable = null;
-        try {
-            InputStream inputStream = (InputStream) url.getContent();
-            drawable = Drawable.createFromStream(inputStream, null);
-        } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem retrieving content from URL: getDrawableObject() block");
-        }
-        return drawable;
     }
 }
