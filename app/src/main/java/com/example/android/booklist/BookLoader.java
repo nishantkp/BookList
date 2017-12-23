@@ -2,11 +2,12 @@ package com.example.android.booklist;
 
 import android.content.Context;
 import android.content.AsyncTaskLoader;
-import android.util.Log;;
+import android.util.Log;
 
 import java.util.List;
 
 /**
+ * Loader class for loading book data in background thread
  * Created by Nishant on 9/6/2017.
  */
 
@@ -15,8 +16,7 @@ public class BookLoader extends AsyncTaskLoader<List<Book>> {
     private String mUrl;
     private String LOG_TAG = BookLoader.class.getName();
 
-
-    public BookLoader(Context context, String url) {
+    BookLoader(Context context, String url) {
         super(context);
         mUrl = url;
     }
@@ -27,7 +27,6 @@ public class BookLoader extends AsyncTaskLoader<List<Book>> {
         forceLoad();
     }
 
-
     @Override
     public List<Book> loadInBackground() {
 
@@ -37,9 +36,6 @@ public class BookLoader extends AsyncTaskLoader<List<Book>> {
             return null;
         }
 
-        List<Book> currentBookData = QueryUtils.fetchBookInformation(mUrl);
-        //Log.i(LOG_TAG,"\n load in background"+mCurrentBookData.toString());
-        return currentBookData;
+        return QueryUtils.fetchBookInformation(mUrl);
     }
-
 }
