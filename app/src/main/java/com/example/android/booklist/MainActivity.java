@@ -28,14 +28,16 @@ public class MainActivity extends AppCompatActivity
 
     final static int BOOK_LOADER_ID = 1;
 
-    final static String GOOGLE_BOOKS_QUERY = "https://www.googleapis.com/books/v1/volumes?q=";
+    final static String GOOGLE_BOOKS_QUERY_PART_ONE = "https://www.googleapis.com/books/v1/volumes?q=";
+    final static String GOOGLE_BOOKS_QUERY_PART_TWO = "&langRestrict=en&maxResults=20&printType=books";
+    public static final String SEARCH_TYPE = "SEARCH_TYPE";
     //final static String GOOGLE_BOOKS_URL = "https://www.googleapis.com/books/v1/volumes?q=android&maxResults=20";
     private ProgressBar mProgressBar;
     private TextView mEmptyTextView;
     private BookAdapter mBookAdapter;
     private ListView mListVIew;
-    private Boolean mSearchByAuthor;
-    private Boolean mSearchByTitle;
+    private boolean mSearchByAuthor;
+    private boolean mSearchByTitle;
     private String mSearchByType;
 
     private String mNewGoogleBooksApiUrl;
@@ -198,30 +200,26 @@ public class MainActivity extends AppCompatActivity
                 switch (mSearchByType) {
                     case "free":
                         // If Free book option is selected
-                        return GOOGLE_BOOKS_QUERY
+                        return GOOGLE_BOOKS_QUERY_PART_ONE
                                 + "intitle:" + bookTitle + "+inauthor:" + bookAuthor
-                                + "&langRestrict=en" + "&maxResults=20"
-                                + "&printType=books" + "&filter=free-ebooks";
+                                + GOOGLE_BOOKS_QUERY_PART_TWO;
                     case "paid":
                         // If paid book option is selected
-                        return GOOGLE_BOOKS_QUERY
+                        return GOOGLE_BOOKS_QUERY_PART_ONE
                                 + "intitle:" + bookTitle + "+inauthor:" + bookAuthor
-                                + "&langRestrict=en" + "&maxResults=20"
-                                + "&printType=books" + "&filter=paid-ebooks";
+                                + GOOGLE_BOOKS_QUERY_PART_TWO;
                     default:
-                        // If none of the option is selected generate the url string with only ebooks filter
-                        return GOOGLE_BOOKS_QUERY
+                        // If none of the option is selected generate the url string with only books filter
+                        return GOOGLE_BOOKS_QUERY_PART_ONE
                                 + "intitle:" + bookTitle + "+inauthor:" + bookAuthor
-                                + "&langRestrict=en" + "&maxResults=20"
-                                + "&printType=books" + "&filter=ebooks";
+                                + GOOGLE_BOOKS_QUERY_PART_TWO;
                 }
             } else {
                 // If user didn't separated title and author with " by "
                 // return url string without adding author and title information
                 // https://www.googleapis.com/books/v1/volumes?q=flower&maxResults=20&printType=books
-                return GOOGLE_BOOKS_QUERY
-                        + formattedQuery + "&langRestrict=en"
-                        + "&maxResults=20" + "&printType=books" +"&filter=ebooks";
+                return GOOGLE_BOOKS_QUERY_PART_ONE
+                        + formattedQuery + GOOGLE_BOOKS_QUERY_PART_TWO;
             }
 
         } else if (mSearchByTitle) {
@@ -230,22 +228,19 @@ public class MainActivity extends AppCompatActivity
             switch (mSearchByType) {
                 case "free":
                     // if user has selected Free books option
-                    return GOOGLE_BOOKS_QUERY
+                    return GOOGLE_BOOKS_QUERY_PART_ONE
                             + "intitle:" + formattedQuery
-                            + "&langRestrict=en" + "&maxResults=20"
-                            + "&printType=books" + "&filter=free-ebooks";
+                            + GOOGLE_BOOKS_QUERY_PART_TWO;
                 case "paid":
                     // if user has selected Paid books option
-                    return GOOGLE_BOOKS_QUERY
+                    return GOOGLE_BOOKS_QUERY_PART_ONE
                             + "intitle:" + formattedQuery
-                            + "&langRestrict=en" + "&maxResults=20"
-                            + "&printType=books" + "&filter=paid-ebooks";
+                            + GOOGLE_BOOKS_QUERY_PART_TWO;
                 default:
-                    // if user has selected one of the options, generate url option with only ebooks filter
-                    return GOOGLE_BOOKS_QUERY
+                    // if user has selected one of the options, generate url option with only books filter
+                    return GOOGLE_BOOKS_QUERY_PART_ONE
                             + "intitle:" + formattedQuery
-                            + "&langRestrict=en" + "&maxResults=20"
-                            + "&printType=books" + "&filter=ebooks";
+                            + GOOGLE_BOOKS_QUERY_PART_TWO;
             }
 
         } else if (mSearchByAuthor) {
@@ -254,41 +249,35 @@ public class MainActivity extends AppCompatActivity
             switch (mSearchByType) {
                 case "free":
                     // If user has selected Free books option
-                    return GOOGLE_BOOKS_QUERY
+                    return GOOGLE_BOOKS_QUERY_PART_ONE
                             + "inauthor:" + formattedQuery
-                            + "&langRestrict=en" + "&maxResults=20"
-                            + "&printType=books" + "&filter=free-ebooks";
+                            + GOOGLE_BOOKS_QUERY_PART_TWO;
                 case "paid":
                     // If user has selected Paid books option
-                    return GOOGLE_BOOKS_QUERY
+                    return GOOGLE_BOOKS_QUERY_PART_ONE
                             + "inauthor:" + formattedQuery
-                            + "&langRestrict=en" + "&maxResults=20"
-                            + "&printType=books" + "&filter=paid-ebooks";
+                            + GOOGLE_BOOKS_QUERY_PART_TWO;
                 default:
-                    // If user has selected none of the option, generate url option with only ebooks filter
-                    return GOOGLE_BOOKS_QUERY
+                    // If user has selected none of the option, generate url option with only books filter
+                    return GOOGLE_BOOKS_QUERY_PART_ONE
                             + "inauthor:" + formattedQuery
-                            + "&langRestrict=en" + "&maxResults=20"
-                            + "&printType=books" + "&filter=ebooks";
+                            + GOOGLE_BOOKS_QUERY_PART_TWO;
             }
         } else if (mSearchByType.equals("free")) {
             // If user has selected only Free books options
-            return GOOGLE_BOOKS_QUERY
-                    + formattedQuery + "&langRestrict=en"
-                    + "&maxResults=20" + "&printType=books" + "&filter=free-ebooks";
+            return GOOGLE_BOOKS_QUERY_PART_ONE
+                    + formattedQuery + GOOGLE_BOOKS_QUERY_PART_TWO;
 
         } else if (mSearchByType.equals("paid")) {
             // If user has selected only Paid books options
-            return GOOGLE_BOOKS_QUERY
-                    + formattedQuery + "&langRestrict=en"
-                    + "&maxResults=20" + "&printType=books" + "&filter=paid-ebooks";
+            return GOOGLE_BOOKS_QUERY_PART_ONE
+                    + formattedQuery + GOOGLE_BOOKS_QUERY_PART_TWO;
 
         } else {
             // If user has only selected None option
-            // https://www.googleapis.com/books/v1/volumes?q=flower&maxResults=20&printType=books&filter=ebooks
-            return GOOGLE_BOOKS_QUERY
-                    + formattedQuery + "&langRestrict=en"
-                    + "&maxResults=20" + "&printType=books"+"&filter=ebooks";
+            // https://www.googleapis.com/books/v1/volumes?q=flower&maxResults=20&printType=books
+            return GOOGLE_BOOKS_QUERY_PART_ONE
+                    + formattedQuery + GOOGLE_BOOKS_QUERY_PART_TWO;
         }
 
     }
@@ -341,5 +330,21 @@ public class MainActivity extends AppCompatActivity
         initLoaderAfterCheckingNetwork();
         // forceLoad the BookLoader with new search query requested by user
         new BookLoader(MainActivity.this, mNewGoogleBooksApiUrl).forceLoad();
+    }
+
+    // Called to retrieve pre-instance state from an activity before being killed so that state can
+    // be restored on onRestoreInstanceState
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString(SEARCH_TYPE, mSearchByType);
+        super.onSaveInstanceState(outState);
+    }
+
+    // Restore the state of variable mSearchBtType when activity is recreated
+    // i.e switching to landscape mode
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mSearchByType = savedInstanceState.getString(SEARCH_TYPE);
     }
 }
