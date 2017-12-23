@@ -32,78 +32,79 @@ public class BookAdapter extends ArrayAdapter<Book> {
     @SuppressLint("SetTextI18n")
     @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 
+        ViewHolder holder;
         View listItemView = convertView;
 
         if (listItemView == null) {
             listItemView = LayoutInflater.from(getContext())
                     .inflate(R.layout.book_list_item, parent, false);
+            holder = new ViewHolder();
+            holder.title = (TextView) listItemView.findViewById(R.id.book_title);
+            holder.author = (TextView) listItemView.findViewById(R.id.book_author);
+            holder.publishedDate = (TextView) listItemView.findViewById(R.id.book_published_date);
+            holder.bookImage = (ImageView) listItemView.findViewById(R.id.book_thumbnail);
+            holder.ratingBar = (RatingBar) listItemView.findViewById(R.id.book_rating);
+            holder.ratingCount = (TextView) listItemView.findViewById(R.id.book_rating_count);
+            holder.bookPrice = (TextView) listItemView.findViewById(R.id.book_price);
+            holder.ratingView = listItemView.findViewById(R.id.book_rating_view);
+            listItemView.setTag(holder);
+        } else {
+            // We've just avoided calling findViewByID every time
+            // So when the listView is present just use the ViewHolder
+            holder = (ViewHolder) listItemView.getTag();
         }
 
         Book currentBookDetail = getItem(position);
 
-        TextView title = (TextView) listItemView.findViewById(R.id.book_title);
         assert currentBookDetail != null;
-        title.setText(currentBookDetail.getBookTitle());
+        holder.title.setText(currentBookDetail.getBookTitle());
 
-        // Find the textView with ID book_author
         // Set the text if there's a author of book, otherwise set visibility of textView to GONE
-        TextView author = (TextView) listItemView.findViewById(R.id.book_author);
         if (currentBookDetail.getBookAuthor() == null) {
-            author.setVisibility(View.GONE);
+            holder.author.setVisibility(View.GONE);
         } else {
-            author.setVisibility(View.VISIBLE);
-            author.setText(currentBookDetail.getBookAuthor());
+            holder.author.setVisibility(View.VISIBLE);
+            holder.author.setText(currentBookDetail.getBookAuthor());
         }
 
-        // Find the textView with ID book_published_date
         // Set the text if there is a published date available, otherwise set visibility of textView
         // to GONE
-        TextView publishedDate = (TextView) listItemView.findViewById(R.id.book_published_date);
         if (currentBookDetail.getPublishedDate() == null) {
-            publishedDate.setVisibility(View.GONE);
+            holder.publishedDate.setVisibility(View.GONE);
         } else {
-            publishedDate.setVisibility(View.VISIBLE);
+            holder.publishedDate.setVisibility(View.VISIBLE);
             // Change the format of date and then set it to textView
-            publishedDate.setText(formatDate(currentBookDetail.getPublishedDate()));
+            holder.publishedDate.setText(formatDate(currentBookDetail.getPublishedDate()));
         }
 
-        // Find the imageVIew with ID book_thumbnail
         // Set the imageView if there is a url available, otherwise set placeholder image
-        ImageView bookImage = (ImageView) listItemView.findViewById(R.id.book_thumbnail);
         if (currentBookDetail.getBookThumbnailUrlString() == null) {
-            bookImage.setImageResource(R.drawable.book_placeholder);
+            holder.bookImage.setImageResource(R.drawable.book_placeholder);
         } else {
             String url = currentBookDetail.getBookThumbnailUrlString();
-            Picasso.with(getContext()).load(url).into(bookImage);
+            Picasso.with(getContext()).load(url).into(holder.bookImage);
         }
 
-        // Find the text view with ID book_price
         // Set the textView if there is`book price available, otherwise hide the textView
-        TextView bookPrice = (TextView) listItemView.findViewById(R.id.book_price);
         if (currentBookDetail.getBookPrice() == null) {
-            bookPrice.setVisibility(View.GONE);
+            holder.bookPrice.setVisibility(View.GONE);
         } else {
-            bookPrice.setVisibility(View.VISIBLE);
-            bookPrice.setText("$" + currentBookDetail.getBookPrice());
+            holder.bookPrice.setVisibility(View.VISIBLE);
+            holder.bookPrice.setText("$" + currentBookDetail.getBookPrice());
         }
 
 
-        // Find the ratingBar with ID book_rating and book_rating_count
         // Set the stars and update the textView if data is available
         // otherwise hide rating bar and textView
-        RatingBar ratingBar = (RatingBar) listItemView.findViewById(R.id.book_rating);
-        TextView ratingCount = (TextView) listItemView.findViewById(R.id.book_rating_count);
-        // View is a linear layout with rating bar and text view as child view
-        View ratingView = (View) listItemView.findViewById(R.id.book_rating_view);
         double rating = currentBookDetail.getBookRating();
         if (rating == 0) {
-            ratingView.setVisibility(View.GONE);
+            holder.ratingView.setVisibility(View.GONE);
         } else {
-            ratingView.setVisibility(View.VISIBLE);
-            ratingBar.setRating((float) rating);
-            ratingCount.setText("(" + currentBookDetail.getBookRatingNumber() + ")");
+            holder.ratingView.setVisibility(View.VISIBLE);
+            holder.ratingBar.setRating((float) rating);
+            holder.ratingCount.setText("(" + currentBookDetail.getBookRatingNumber() + ")");
         }
         return listItemView;
     }
@@ -152,5 +153,21 @@ public class BookAdapter extends ArrayAdapter<Book> {
                 // return the same string because it's only year
                 return date;
         }
+    }
+
+    /**
+     * ViewHolder for list item in res/layout/book_list_item.xml
+     * View holder that cashes the views so we do not need to use findViewById every time
+     * So scrolling of list view becomes more smooth
+     */
+    private static class ViewHolder{
+        private TextView title;
+        private TextView author;
+        private TextView bookPrice;
+        private TextView publishedDate;
+        private ImageView bookImage;
+        private RatingBar ratingBar;
+        private TextView ratingCount;
+        private View ratingView;
     }
 }
