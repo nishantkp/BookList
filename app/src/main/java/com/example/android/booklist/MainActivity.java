@@ -20,6 +20,9 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.android.booklist.Data.Constants;
+import com.example.android.booklist.Data.PublicKeys;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,11 +30,7 @@ public class MainActivity extends AppCompatActivity
         implements LoaderCallbacks<List<Book>> {
 
     final static int BOOK_LOADER_ID = 1;
-
-    final static String GOOGLE_BOOKS_QUERY_PART_ONE = "https://www.googleapis.com/books/v1/volumes?q=";
-    final static String GOOGLE_BOOKS_QUERY_PART_TWO = "&langRestrict=en&maxResults=20&printType=books";
-    public static final String SEARCH_TYPE = "SEARCH_TYPE";
-    //final static String GOOGLE_BOOKS_URL = "https://www.googleapis.com/books/v1/volumes?q=android&maxResults=20";
+    private final String LOG_TAG = MainActivity.class.getName();
     private ProgressBar mProgressBar;
     private TextView mEmptyTextView;
     private BookAdapter mBookAdapter;
@@ -39,13 +38,9 @@ public class MainActivity extends AppCompatActivity
     private boolean mSearchByAuthor;
     private boolean mSearchByTitle;
     private String mSearchByType;
-
     private String mNewGoogleBooksApiUrl;
-
     /* EditText view for user input query */
     private EditText mUserInputQuery;
-
-    private final String LOG_TAG = MainActivity.class.getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,94 +185,97 @@ public class MainActivity extends AppCompatActivity
             // If user query contains " by " then split the string
             // otherwise return default url string
             // https://www.googleapis.com/books/v1/volumes?q=intitle:flower+inauthor:max&maxResults=20&printType=books
-            if (userQuery.contains(" by ")) {
-                String[] parts = userQuery.split(" by ");
+            if (userQuery.contains(Constants.SEPARATOR)) {
+                String[] parts = userQuery.split(Constants.SEPARATOR);
                 String bookTitle = parts[0].replaceAll(" ", "+");
                 String bookAuthor = parts[1].replaceAll(" ", "+");
                 Log.i(LOG_TAG, "title : " + bookTitle);
                 Log.i(LOG_TAG, "author : " + bookAuthor);
 
                 switch (mSearchByType) {
-                    case "free":
+                    case Constants.SEARCH_TYPE_FREE:
                         // If Free book option is selected
-                        return GOOGLE_BOOKS_QUERY_PART_ONE
-                                + "intitle:" + bookTitle + "+inauthor:" + bookAuthor
-                                + GOOGLE_BOOKS_QUERY_PART_TWO;
-                    case "paid":
+                        return Constants.GOOGLE_BOOKS_QUERY_PART_ONE
+                                + PublicKeys.SEARCH_API_INTITLE_KEY + ":" + bookTitle
+                                + "+" + PublicKeys.SEARCH_API_INAUTOR_KEY + ":" + bookAuthor
+                                + Constants.GOOGLE_BOOKS_QUERY_PART_TWO;
+                    case Constants.SEARCH_TYPE_PAID:
                         // If paid book option is selected
-                        return GOOGLE_BOOKS_QUERY_PART_ONE
-                                + "intitle:" + bookTitle + "+inauthor:" + bookAuthor
-                                + GOOGLE_BOOKS_QUERY_PART_TWO;
+                        return Constants.GOOGLE_BOOKS_QUERY_PART_ONE
+                                + PublicKeys.SEARCH_API_INTITLE_KEY + ":" + bookTitle
+                                + "+" + PublicKeys.SEARCH_API_INAUTOR_KEY + ":" + bookAuthor
+                                + Constants.GOOGLE_BOOKS_QUERY_PART_TWO;
                     default:
                         // If none of the option is selected generate the url string with only books filter
-                        return GOOGLE_BOOKS_QUERY_PART_ONE
-                                + "intitle:" + bookTitle + "+inauthor:" + bookAuthor
-                                + GOOGLE_BOOKS_QUERY_PART_TWO;
+                        return Constants.GOOGLE_BOOKS_QUERY_PART_ONE
+                                + PublicKeys.SEARCH_API_INTITLE_KEY + ":" + bookTitle
+                                + "+" + PublicKeys.SEARCH_API_INAUTOR_KEY + ":" + bookAuthor
+                                + Constants.GOOGLE_BOOKS_QUERY_PART_TWO;
                 }
             } else {
                 // If user didn't separated title and author with " by "
                 // return url string without adding author and title information
                 // https://www.googleapis.com/books/v1/volumes?q=flower&maxResults=20&printType=books
-                return GOOGLE_BOOKS_QUERY_PART_ONE
-                        + formattedQuery + GOOGLE_BOOKS_QUERY_PART_TWO;
+                return Constants.GOOGLE_BOOKS_QUERY_PART_ONE
+                        + formattedQuery + Constants.GOOGLE_BOOKS_QUERY_PART_TWO;
             }
 
         } else if (mSearchByTitle) {
             // If preference for only Title is selected
             // https://www.googleapis.com/books/v1/volumes?q=intitle:flower&maxResults=20&printType=books
             switch (mSearchByType) {
-                case "free":
+                case Constants.SEARCH_TYPE_FREE:
                     // if user has selected Free books option
-                    return GOOGLE_BOOKS_QUERY_PART_ONE
-                            + "intitle:" + formattedQuery
-                            + GOOGLE_BOOKS_QUERY_PART_TWO;
-                case "paid":
+                    return Constants.GOOGLE_BOOKS_QUERY_PART_ONE
+                            + PublicKeys.SEARCH_API_INTITLE_KEY + ":" + formattedQuery
+                            + Constants.GOOGLE_BOOKS_QUERY_PART_TWO;
+                case Constants.SEARCH_TYPE_PAID:
                     // if user has selected Paid books option
-                    return GOOGLE_BOOKS_QUERY_PART_ONE
-                            + "intitle:" + formattedQuery
-                            + GOOGLE_BOOKS_QUERY_PART_TWO;
+                    return Constants.GOOGLE_BOOKS_QUERY_PART_ONE
+                            + PublicKeys.SEARCH_API_INTITLE_KEY + ":" + formattedQuery
+                            + Constants.GOOGLE_BOOKS_QUERY_PART_TWO;
                 default:
                     // if user has selected one of the options, generate url option with only books filter
-                    return GOOGLE_BOOKS_QUERY_PART_ONE
-                            + "intitle:" + formattedQuery
-                            + GOOGLE_BOOKS_QUERY_PART_TWO;
+                    return Constants.GOOGLE_BOOKS_QUERY_PART_ONE
+                            + PublicKeys.SEARCH_API_INTITLE_KEY + ":" + formattedQuery
+                            + Constants.GOOGLE_BOOKS_QUERY_PART_TWO;
             }
 
         } else if (mSearchByAuthor) {
             // If preference for only Author is selected
             // https://www.googleapis.com/books/v1/volumes?q=inauthor:max&maxResults=20&printType=books
             switch (mSearchByType) {
-                case "free":
+                case Constants.SEARCH_TYPE_FREE:
                     // If user has selected Free books option
-                    return GOOGLE_BOOKS_QUERY_PART_ONE
-                            + "inauthor:" + formattedQuery
-                            + GOOGLE_BOOKS_QUERY_PART_TWO;
-                case "paid":
+                    return Constants.GOOGLE_BOOKS_QUERY_PART_ONE
+                            + PublicKeys.SEARCH_API_INAUTOR_KEY + ":" + formattedQuery
+                            + Constants.GOOGLE_BOOKS_QUERY_PART_TWO;
+                case Constants.SEARCH_TYPE_PAID:
                     // If user has selected Paid books option
-                    return GOOGLE_BOOKS_QUERY_PART_ONE
-                            + "inauthor:" + formattedQuery
-                            + GOOGLE_BOOKS_QUERY_PART_TWO;
+                    return Constants.GOOGLE_BOOKS_QUERY_PART_ONE
+                            + PublicKeys.SEARCH_API_INAUTOR_KEY + ":" + formattedQuery
+                            + Constants.GOOGLE_BOOKS_QUERY_PART_TWO;
                 default:
                     // If user has selected none of the option, generate url option with only books filter
-                    return GOOGLE_BOOKS_QUERY_PART_ONE
-                            + "inauthor:" + formattedQuery
-                            + GOOGLE_BOOKS_QUERY_PART_TWO;
+                    return Constants.GOOGLE_BOOKS_QUERY_PART_ONE
+                            + PublicKeys.SEARCH_API_INAUTOR_KEY + ":" + formattedQuery
+                            + Constants.GOOGLE_BOOKS_QUERY_PART_TWO;
             }
-        } else if (mSearchByType.equals("free")) {
+        } else if (mSearchByType.equals(Constants.SEARCH_TYPE_FREE)) {
             // If user has selected only Free books options
-            return GOOGLE_BOOKS_QUERY_PART_ONE
-                    + formattedQuery + GOOGLE_BOOKS_QUERY_PART_TWO;
+            return Constants.GOOGLE_BOOKS_QUERY_PART_ONE
+                    + formattedQuery + Constants.GOOGLE_BOOKS_QUERY_PART_TWO;
 
-        } else if (mSearchByType.equals("paid")) {
+        } else if (mSearchByType.equals(Constants.SEARCH_TYPE_PAID)) {
             // If user has selected only Paid books options
-            return GOOGLE_BOOKS_QUERY_PART_ONE
-                    + formattedQuery + GOOGLE_BOOKS_QUERY_PART_TWO;
+            return Constants.GOOGLE_BOOKS_QUERY_PART_ONE
+                    + formattedQuery + Constants.GOOGLE_BOOKS_QUERY_PART_TWO;
 
         } else {
             // If user has only selected None option
             // https://www.googleapis.com/books/v1/volumes?q=flower&maxResults=20&printType=books
-            return GOOGLE_BOOKS_QUERY_PART_ONE
-                    + formattedQuery + GOOGLE_BOOKS_QUERY_PART_TWO;
+            return Constants.GOOGLE_BOOKS_QUERY_PART_ONE
+                    + formattedQuery + Constants.GOOGLE_BOOKS_QUERY_PART_TWO;
         }
 
     }
@@ -303,7 +301,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     // Get the query from user and initialize new loader with new content
-    private void getTextAndInitLoader(){
+    private void getTextAndInitLoader() {
         // Get the query requested by user from the EditText with id user_query
         String userQuery = mUserInputQuery.getText().toString().trim();
 
@@ -336,7 +334,7 @@ public class MainActivity extends AppCompatActivity
     // be restored on onRestoreInstanceState
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putString(SEARCH_TYPE, mSearchByType);
+        outState.putString(PublicKeys.SEARCH_TYPE_KEY, mSearchByType);
         super.onSaveInstanceState(outState);
     }
 
@@ -345,6 +343,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        mSearchByType = savedInstanceState.getString(SEARCH_TYPE);
+        mSearchByType = savedInstanceState.getString(PublicKeys.SEARCH_TYPE_KEY);
     }
 }

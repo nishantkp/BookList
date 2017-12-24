@@ -1,7 +1,9 @@
 package com.example.android.booklist;
 
-import android.graphics.drawable.Drawable;
 import android.util.Log;
+
+import com.example.android.booklist.Data.Constants;
+import com.example.android.booklist.Data.PublicKeys;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -91,12 +93,12 @@ public class QueryUtils {
         String JSONResponse = null;
         try {
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
-            urlConnection.setReadTimeout(10000);
-            urlConnection.setConnectTimeout(15000);
+            urlConnection.setRequestMethod(Constants.URL_CONNECTION_REQUEST_METHOD);
+            urlConnection.setReadTimeout(Constants.URL_CONNECTION_READ_TIME_OUT);
+            urlConnection.setConnectTimeout(Constants.URL_CONNECTION_CONNECT_TIME_OUT);
             urlConnection.connect();
 
-            if (urlConnection.getResponseCode() == 200) {
+            if (urlConnection.getResponseCode() == Constants.URL_CONNECTION_SUCCESS_RESPONSE_CODE) {
                 Log.i(LOG_TAG, "Success Response Code : 200");
                 inputStream = urlConnection.getInputStream();
                 JSONResponse = readFromStream(inputStream);
@@ -154,23 +156,23 @@ public class QueryUtils {
             JSONObject baseJsonObject = new JSONObject(JSONResponse);
 
             // If JSON response has error object, return null List<Book> object
-            if (baseJsonObject.has("error")) {
+            if (baseJsonObject.has(PublicKeys.JSON_ERROR_KEY)) {
                 //Log.e(LOG_TAG, "Json object has error");
                 bookList = null;
             }
-            if (baseJsonObject.has("items")) {
+            if (baseJsonObject.has(PublicKeys.JSON_ITEMS_KEY)) {
                 //Log.i(LOG_TAG, "has JSON object ; items");
-                JSONArray bookArray = baseJsonObject.getJSONArray("items");
+                JSONArray bookArray = baseJsonObject.getJSONArray(PublicKeys.JSON_ITEMS_KEY);
                 for (int i = 0; i < bookArray.length(); i++) {
 
                     JSONObject bookObject = bookArray.getJSONObject(i);
 
-                    JSONObject volumeInfo = bookObject.getJSONObject("volumeInfo");
-                    String title = volumeInfo.getString("title");
+                    JSONObject volumeInfo = bookObject.getJSONObject(PublicKeys.JSON_VOLUME_INFO_KEY);
+                    String title = volumeInfo.getString(PublicKeys.JSON_BOOK_TITLE_KEY);
 
                     String authors;
-                    if (volumeInfo.has("authors")) {
-                        JSONArray authorsArray = volumeInfo.getJSONArray("authors");
+                    if (volumeInfo.has(PublicKeys.JSON_AUTHOR_INFO_KEY)) {
+                        JSONArray authorsArray = volumeInfo.getJSONArray(PublicKeys.JSON_AUTHOR_INFO_KEY);
                         StringBuilder authorsStringBuilder = new StringBuilder();
                         authorsStringBuilder.append(authorsArray.getString(0));
                         for (int j = 1; j < authorsArray.length(); j++) {
@@ -183,37 +185,37 @@ public class QueryUtils {
                     }
 
                     String publishedDate;
-                    if (volumeInfo.has("publishedDate")) {
-                        publishedDate = volumeInfo.getString("publishedDate");
+                    if (volumeInfo.has(PublicKeys.JSON_PUBLISHED_DATE_KEY)) {
+                        publishedDate = volumeInfo.getString(PublicKeys.JSON_PUBLISHED_DATE_KEY);
                     } else {
                         publishedDate = null;
                     }
 
                     double averageRating;
-                    if (volumeInfo.has("averageRating")) {
-                        averageRating = volumeInfo.getInt("averageRating");
+                    if (volumeInfo.has(PublicKeys.JSON_AVERAGE_RATING_KEY)) {
+                        averageRating = volumeInfo.getInt(PublicKeys.JSON_AVERAGE_RATING_KEY);
                     } else {
                         averageRating = 0.0;
                     }
 
                     String ratingCount;
-                    if (volumeInfo.has("ratingsCount")) {
-                        ratingCount = volumeInfo.getString("ratingsCount");
+                    if (volumeInfo.has(PublicKeys.JSON_RATING_COUNT_KEY)) {
+                        ratingCount = volumeInfo.getString(PublicKeys.JSON_RATING_COUNT_KEY);
                     } else {
                         ratingCount = null;
                     }
 
                     String thumbnailUrlString = null;
-                    if (volumeInfo.has("imageLinks")) {
-                        JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
-                        thumbnailUrlString = imageLinks.getString("smallThumbnail");
+                    if (volumeInfo.has(PublicKeys.JSON_IMAGE_LINK_KEY)) {
+                        JSONObject imageLinks = volumeInfo.getJSONObject(PublicKeys.JSON_IMAGE_LINK_KEY);
+                        thumbnailUrlString = imageLinks.getString(PublicKeys.JSON_SMALL_THUMBNAIL_KEY);
                     }
 
-                    JSONObject salesInfo = bookObject.getJSONObject("saleInfo");
+                    JSONObject salesInfo = bookObject.getJSONObject(PublicKeys.JSON_SALES_INFO_KEY);
                     String amount;
-                    if (salesInfo.has("retailPrice")) {
-                        JSONObject retailPrice = salesInfo.getJSONObject("retailPrice");
-                        amount = retailPrice.getString("amount");
+                    if (salesInfo.has(PublicKeys.JSON_RETAIL_PRICE_KEY)) {
+                        JSONObject retailPrice = salesInfo.getJSONObject(PublicKeys.JSON_RETAIL_PRICE_KEY);
+                        amount = retailPrice.getString(PublicKeys.JSON_AMOUNT_KEY);
                     } else {
                         amount = null;
                     }
