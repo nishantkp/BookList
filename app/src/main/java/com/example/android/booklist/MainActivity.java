@@ -198,13 +198,15 @@ public class MainActivity extends AppCompatActivity
                         return Constants.GOOGLE_BOOKS_QUERY_PART_ONE
                                 + PublicKeys.SEARCH_API_INTITLE_KEY + ":" + bookTitle
                                 + "+" + PublicKeys.SEARCH_API_INAUTOR_KEY + ":" + bookAuthor
-                                + Constants.GOOGLE_BOOKS_QUERY_PART_TWO;
+                                + Constants.GOOGLE_BOOKS_QUERY_PART_TWO
+                                + Constants.SEARCH_API_SEPARATOR + PublicKeys.SEARCH_API_FILTER_KEY + "=" + Constants.SEARCH_API_FREE_BOOKS;
                     case Constants.SEARCH_TYPE_PAID:
                         // If paid book option is selected
                         return Constants.GOOGLE_BOOKS_QUERY_PART_ONE
                                 + PublicKeys.SEARCH_API_INTITLE_KEY + ":" + bookTitle
                                 + "+" + PublicKeys.SEARCH_API_INAUTOR_KEY + ":" + bookAuthor
-                                + Constants.GOOGLE_BOOKS_QUERY_PART_TWO;
+                                + Constants.GOOGLE_BOOKS_QUERY_PART_TWO
+                                + Constants.SEARCH_API_SEPARATOR + PublicKeys.SEARCH_API_FILTER_KEY + "=" + Constants.SEARCH_API_PAID_BOOKS;
                     default:
                         // If none of the option is selected generate the url string with only books filter
                         return Constants.GOOGLE_BOOKS_QUERY_PART_ONE
@@ -228,12 +230,14 @@ public class MainActivity extends AppCompatActivity
                     // if user has selected Free books option
                     return Constants.GOOGLE_BOOKS_QUERY_PART_ONE
                             + PublicKeys.SEARCH_API_INTITLE_KEY + ":" + formattedQuery
-                            + Constants.GOOGLE_BOOKS_QUERY_PART_TWO;
+                            + Constants.GOOGLE_BOOKS_QUERY_PART_TWO
+                            + Constants.SEARCH_API_SEPARATOR + PublicKeys.SEARCH_API_FILTER_KEY + "=" + Constants.SEARCH_API_FREE_BOOKS;
                 case Constants.SEARCH_TYPE_PAID:
                     // if user has selected Paid books option
                     return Constants.GOOGLE_BOOKS_QUERY_PART_ONE
                             + PublicKeys.SEARCH_API_INTITLE_KEY + ":" + formattedQuery
-                            + Constants.GOOGLE_BOOKS_QUERY_PART_TWO;
+                            + Constants.GOOGLE_BOOKS_QUERY_PART_TWO
+                            + Constants.SEARCH_API_SEPARATOR + PublicKeys.SEARCH_API_FILTER_KEY + "=" + Constants.SEARCH_API_PAID_BOOKS;
                 default:
                     // if user has selected one of the options, generate url option with only books filter
                     return Constants.GOOGLE_BOOKS_QUERY_PART_ONE
@@ -249,12 +253,14 @@ public class MainActivity extends AppCompatActivity
                     // If user has selected Free books option
                     return Constants.GOOGLE_BOOKS_QUERY_PART_ONE
                             + PublicKeys.SEARCH_API_INAUTOR_KEY + ":" + formattedQuery
-                            + Constants.GOOGLE_BOOKS_QUERY_PART_TWO;
+                            + Constants.GOOGLE_BOOKS_QUERY_PART_TWO
+                            + Constants.SEARCH_API_SEPARATOR + PublicKeys.SEARCH_API_FILTER_KEY + "=" + Constants.SEARCH_API_FREE_BOOKS;
                 case Constants.SEARCH_TYPE_PAID:
                     // If user has selected Paid books option
                     return Constants.GOOGLE_BOOKS_QUERY_PART_ONE
                             + PublicKeys.SEARCH_API_INAUTOR_KEY + ":" + formattedQuery
-                            + Constants.GOOGLE_BOOKS_QUERY_PART_TWO;
+                            + Constants.GOOGLE_BOOKS_QUERY_PART_TWO
+                            + Constants.SEARCH_API_SEPARATOR + PublicKeys.SEARCH_API_FILTER_KEY + "=" + Constants.SEARCH_API_PAID_BOOKS;
                 default:
                     // If user has selected none of the option, generate url option with only books filter
                     return Constants.GOOGLE_BOOKS_QUERY_PART_ONE
@@ -264,12 +270,14 @@ public class MainActivity extends AppCompatActivity
         } else if (mSearchByType.equals(Constants.SEARCH_TYPE_FREE)) {
             // If user has selected only Free books options
             return Constants.GOOGLE_BOOKS_QUERY_PART_ONE
-                    + formattedQuery + Constants.GOOGLE_BOOKS_QUERY_PART_TWO;
+                    + formattedQuery + Constants.GOOGLE_BOOKS_QUERY_PART_TWO
+                    + Constants.SEARCH_API_SEPARATOR + PublicKeys.SEARCH_API_FILTER_KEY + "=" + Constants.SEARCH_API_FREE_BOOKS;
 
         } else if (mSearchByType.equals(Constants.SEARCH_TYPE_PAID)) {
             // If user has selected only Paid books options
             return Constants.GOOGLE_BOOKS_QUERY_PART_ONE
-                    + formattedQuery + Constants.GOOGLE_BOOKS_QUERY_PART_TWO;
+                    + formattedQuery + Constants.GOOGLE_BOOKS_QUERY_PART_TWO
+                    + Constants.SEARCH_API_SEPARATOR + PublicKeys.SEARCH_API_FILTER_KEY + "=" + Constants.SEARCH_API_PAID_BOOKS;
 
         } else {
             // If user has only selected None option

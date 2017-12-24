@@ -16,6 +16,9 @@ public class Constants {
     public static final String SEPARATOR = " by ";
     public static final String SEARCH_TYPE_FREE = "free";
     public static final String SEARCH_TYPE_PAID = "paid";
+    public static final String SEARCH_API_FREE_BOOKS = "free-ebooks";
+    public static final String SEARCH_API_PAID_BOOKS = "paid-ebooks";
+    public static final String SEARCH_API_SEPARATOR = "&";
 
     private Constants() {
         // Empty constructor so no one can initialize it

@@ -23,6 +23,7 @@ public class PublicKeys {
     public static final String SEARCH_TYPE_KEY = "search_type";
     public static final String SEARCH_API_INTITLE_KEY = "intitle";
     public static final String SEARCH_API_INAUTOR_KEY = "inauthor";
+    public static final String SEARCH_API_FILTER_KEY = "filter";
 
     private PublicKeys() {
         // Empty constructor, so no one can initialize it
